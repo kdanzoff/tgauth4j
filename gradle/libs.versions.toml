@@ -1,6 +1,7 @@
 [versions]
 kotlin = "2.3.21"
 spring-boot = "4.1.2"   # BOM: versions of Spring Security, Spring Framework, Jackson, JUnit
+kotlin-result = "2.3.1"
 archunit = "1.5.1"
 
 [libraries]
@@ -20,6 +21,9 @@ spring-webmvc = { module = "org.springframework:spring-webmvc" }
 spring-test = { module = "org.springframework:spring-test" }
 spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure" }
 spring-boot-test = { module = "org.springframework.boot:spring-boot-test" }
+
+# Other
+kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", version.ref = "kotlin-result" }
 
 # Tests
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }

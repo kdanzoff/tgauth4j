@@ -1,5 +1,7 @@
 package io.github.kdanzoff.tgauth4j.core
 
+import com.github.michaelbull.result.get
+import com.github.michaelbull.result.runCatching
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.json.JsonMapper
 
@@ -10,7 +12,7 @@ internal object TelegramUserParser {
 
     /** User described by [user], or `null` if it is malformed, has no positive id or no first name. */
     fun parse(user: String): TelegramUser? {
-        val node = runCatching { json.readTree(user) }.getOrNull() ?: return null
+        val node = runCatching { json.readTree(user) }.get() ?: return null
         val id = node.get("id")?.takeIf { it.isIntegralNumber }?.longValue()?.takeIf { it > 0 } ?: return null
         val firstName = text(node, "first_name") ?: return null
         return TelegramUser(

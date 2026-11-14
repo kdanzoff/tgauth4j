@@ -1,5 +1,7 @@
 package io.github.kdanzoff.tgauth4j.core
 
+import com.github.michaelbull.result.get
+import com.github.michaelbull.result.runCatching
 import java.net.URLDecoder
 
 /** Reads the fields of `initData` (URL-encoded `key=value` pairs separated by `&`). */
@@ -9,7 +11,7 @@ internal object InitDataFields {
     fun parse(initData: String): Map<String, String>? {
         val pairs = initData.split('&')
         if (initData.isBlank() || pairs.any { it.indexOf('=') <= 0 }) return null
-        return runCatching { pairs.associate(::decode) }.getOrNull()
+        return runCatching { pairs.associate(::decode) }.get()
     }
 
     /** Signed string: fields sorted by key, `key=value` separated by a line feed, without [excluded]. */
