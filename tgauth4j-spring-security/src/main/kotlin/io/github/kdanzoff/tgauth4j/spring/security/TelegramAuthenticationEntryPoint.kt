@@ -2,6 +2,7 @@ package io.github.kdanzoff.tgauth4j.spring.security
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 
@@ -12,8 +13,10 @@ import org.springframework.security.web.AuthenticationEntryPoint
 public class TelegramAuthenticationEntryPoint : AuthenticationEntryPoint {
 
     override fun commence(request: HttpServletRequest, response: HttpServletResponse, failure: AuthenticationException) {
+        val challenge = challenge(failure)
+        log.trace("401 for {} {} ({}): {}: {}", request.method, request.requestURI, failure.javaClass.simpleName, WWW_AUTHENTICATE, challenge)
         response.status = HttpServletResponse.SC_UNAUTHORIZED
-        response.setHeader(WWW_AUTHENTICATE, challenge(failure))
+        response.setHeader(WWW_AUTHENTICATE, challenge)
     }
 
     private fun challenge(failure: AuthenticationException): String =
@@ -22,5 +25,6 @@ public class TelegramAuthenticationEntryPoint : AuthenticationEntryPoint {
     private companion object {
         const val WWW_AUTHENTICATE = "WWW-Authenticate"
         const val SCHEME = "tma"
+        private val log = LoggerFactory.getLogger(TelegramAuthenticationEntryPoint::class.java)
     }
 }

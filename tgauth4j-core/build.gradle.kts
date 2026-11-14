@@ -8,6 +8,8 @@ dependencies {
     implementation(libs.jackson.databind)
     // Catches parsing failures as a Result.
     implementation(libs.kotlin.result)
+    // TRACE logs, for developers who want to follow a verification.
+    implementation(libs.slf4j.api)
 
     testImplementation(project(":tgauth4j-test"))
 }

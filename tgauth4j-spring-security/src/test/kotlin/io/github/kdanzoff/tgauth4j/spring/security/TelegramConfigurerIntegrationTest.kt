@@ -1,10 +1,15 @@
 package io.github.kdanzoff.tgauth4j.spring.security
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import io.github.kdanzoff.tgauth4j.core.BotToken
 import io.github.kdanzoff.tgauth4j.core.TelegramInitData
 import io.github.kdanzoff.tgauth4j.test.TelegramTestInitData.telegramInitData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.mock.web.MockServletContext
@@ -104,6 +109,42 @@ class TelegramConfigurerIntegrationTest {
         assertThat(token.credentials).isNull()
         assertThat(token.verificationKey).isNull()
         assertThat(token.toString()).doesNotContain("Ada")
+    }
+
+    @Test
+    fun `TRACE logs follow the authentication without personal data`() {
+        val mvc = mvc(KotlinDslChain::class.java)
+
+        val logs = traceLogs {
+            mvc.me { with(telegramInitData(TOKEN) { userId = 42; firstName = "Ada"; username = "ada_lovelace"; authDate = NOW }) }
+            mvc.me { with(telegramInitData(OTHER_TOKEN) { firstName = "Ada"; authDate = NOW }) }
+            mvc.me()
+        }
+
+        assertThat(logs).contains(
+            "initData verified: user 42",
+            "Telegram user 42 authenticated as '42' with [ROLE_USER]",
+            "initData rejected as BAD_SIGNATURE",
+            "No Authorization header",
+            "401 for GET /me",
+        )
+        assertThat(logs).doesNotContain("Ada", "ada_lovelace", "TEST-TOKEN", "OTHER-TOKEN", "user=", "%7B")
+    }
+
+    /** Messages logged by tgauth4j at `TRACE` while [block] runs. */
+    private fun traceLogs(block: () -> Unit): String {
+        val logger = LoggerFactory.getLogger("io.github.kdanzoff.tgauth4j") as Logger
+        val appender = ListAppender<ILoggingEvent>().apply { start() }
+        val level = logger.level
+        logger.level = Level.TRACE
+        logger.addAppender(appender)
+        try {
+            block()
+        } finally {
+            logger.detachAppender(appender)
+            logger.level = level
+        }
+        return appender.list.joinToString("\n") { it.formattedMessage }
     }
 
     @Configuration(proxyBeanMethods = false)

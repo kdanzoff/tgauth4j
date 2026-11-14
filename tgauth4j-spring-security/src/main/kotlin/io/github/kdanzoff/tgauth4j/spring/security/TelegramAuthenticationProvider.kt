@@ -4,6 +4,7 @@ import io.github.kdanzoff.tgauth4j.core.InvalidReason
 import io.github.kdanzoff.tgauth4j.core.TelegramInitData
 import io.github.kdanzoff.tgauth4j.core.TelegramInitDataVerifier
 import io.github.kdanzoff.tgauth4j.core.VerificationResult
+import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.core.Authentication
@@ -30,6 +31,7 @@ public class TelegramAuthenticationProvider(
         val initData = verified(authentication as TelegramAuthenticationToken)
         val user = loadUser(initData)
         userDetailsChecker.check(user)
+        log.trace("Telegram user {} authenticated as '{}' with {}", initData.user.id, user.username, user.authorities)
         return TelegramAuthenticationToken.authenticated(user, initData)
     }
 
@@ -41,12 +43,24 @@ public class TelegramAuthenticationProvider(
         if (raw == null || key == null) throw InvalidInitDataException(InvalidReason.MALFORMED)
         return when (val result = verifier.verify(raw, key)) {
             is VerificationResult.Valid -> result.initData
-            is VerificationResult.Invalid -> throw InvalidInitDataException(result.reason)
+            is VerificationResult.Invalid -> throw InvalidInitDataException(result.reason).also {
+                log.trace("initData rejected ({}), answering {}", result.reason, it.errorCode)
+            }
         }
     }
 
     private fun loadUser(initData: TelegramInitData): UserDetails = when (val users = userDetailsService) {
-        is TelegramUserDetailsService -> users.loadUserByInitData(initData)
-        else -> users.loadUserByUsername(initData.user.id.toString())
+        is TelegramUserDetailsService -> {
+            log.trace("Loading Telegram user {} with {}.loadUserByInitData", initData.user.id, users.javaClass.name)
+            users.loadUserByInitData(initData)
+        }
+        else -> {
+            log.trace("Loading Telegram user {} with {}.loadUserByUsername", initData.user.id, users.javaClass.name)
+            users.loadUserByUsername(initData.user.id.toString())
+        }
+    }
+
+    private companion object {
+        private val log = LoggerFactory.getLogger(TelegramAuthenticationProvider::class.java)
     }
 }

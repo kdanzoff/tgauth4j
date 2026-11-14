@@ -110,11 +110,33 @@ when (val result = verifier.verify(initData, BotToken(token))) {
 mockMvc.get("/api/me") { with(TelegramTestInitData.telegramInitData(BOT_TOKEN) { userId = 42 }) }
 ```
 
+## Logging
+
+tgauth4j logs through SLF4J, at `TRACE` level only, to follow an authentication during development:
+
+```yaml
+logging:
+  level:
+    io.github.kdanzoff.tgauth4j: TRACE
+```
+
+```
+TRACE i.g.k.t.s.s.TelegramConfigurer - Telegram Mini App authentication: …TelegramInitDataVerifier, …, entry point …
+TRACE i.g.k.t.s.s.TelegramAuthenticationConverter - initData found in GET /api/me (412 characters), to verify for bot 123456
+TRACE i.g.k.t.core.TelegramInitDataVerifier - Verifying initData for bot 123456, fields [auth_date, hash, query_id, user]
+TRACE i.g.k.t.core.TelegramInitDataVerifier - initData rejected as EXPIRED: auth_date 2026-11-14T08:00:00Z is older than maxAge PT1H (now …)
+TRACE i.g.k.t.s.s.TelegramAuthenticationEntryPoint - 401 for GET /api/me (InvalidInitDataException): WWW-Authenticate: tma error="init_data_expired"
+```
+
+A rejection names its cause: no `Authorization` header or another scheme, malformed `initData`, signature mismatch
+(wrong bot token), `auth_date` too old or in the future, missing user.
+
 ## Security notes
 
 - Only a key derived from the bot token is kept in memory; `BotToken.toString()` shows the bot id only.
 - `initData` contains personal data: `toString()` of `TelegramUser`, `TelegramInitData` and the authentication token
-  shows ids only, and nothing read is logged.
+  shows ids only. Logs contain field names, the bot id, the user id, `auth_date` and authorities, never field values
+  such as names or the raw `initData`.
 - Raw `initData` and the key are erased from the authentication once verified.
 
 ## License

@@ -1,6 +1,7 @@
 package io.github.kdanzoff.tgauth4j.spring.security
 
 import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.LoggerFactory
 
 /** Reads the raw `initData` of a request. */
 public fun interface InitDataResolver {
@@ -12,11 +13,22 @@ public fun interface InitDataResolver {
 /** `Authorization: tma <initData>`, the scheme recommended by Telegram; another scheme or no header: `null`. */
 public class HeaderInitDataResolver : InitDataResolver {
 
-    override fun resolve(request: HttpServletRequest): String? =
-        request.getHeader(AUTHORIZATION)?.takeIf { it.startsWith(SCHEME) }?.removePrefix(SCHEME)
+    override fun resolve(request: HttpServletRequest): String? {
+        val header = request.getHeader(AUTHORIZATION)
+        if (header == null) {
+            log.trace("No {} header", AUTHORIZATION)
+            return null
+        }
+        if (!header.startsWith(SCHEME)) {
+            log.trace("{} header without the '{}' scheme, ignored", AUTHORIZATION, SCHEME.trim())
+            return null
+        }
+        return header.removePrefix(SCHEME)
+    }
 
     private companion object {
         const val AUTHORIZATION = "Authorization"
         const val SCHEME = "tma "
+        private val log = LoggerFactory.getLogger(HeaderInitDataResolver::class.java)
     }
 }

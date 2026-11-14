@@ -1,5 +1,6 @@
 package io.github.kdanzoff.tgauth4j.spring.security
 
+import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.Customizer
@@ -53,11 +54,23 @@ public class TelegramConfigurer : AbstractHttpConfigurer<TelegramConfigurer, Htt
     }
 
     private fun authenticationFilter(context: ApplicationContext?): AuthenticationFilter {
-        val provider = TelegramAuthenticationProvider(miniApp.verifier(context), miniApp.userDetailsService(context))
-        val converter = TelegramAuthenticationConverter(miniApp.initDataResolver(context), miniApp.botTokenResolver(context))
+        val verifier = miniApp.verifier(context)
+        val userDetailsService = miniApp.userDetailsService(context)
+        val initDataResolver = miniApp.initDataResolver(context)
+        val botTokenResolver = miniApp.botTokenResolver(context)
+        val successHandler = miniApp.successHandler()
+        traceSettings(verifier, userDetailsService, initDataResolver, botTokenResolver, successHandler)
+        val provider = TelegramAuthenticationProvider(verifier, userDetailsService)
+        val converter = TelegramAuthenticationConverter(initDataResolver, botTokenResolver)
         return AuthenticationFilter(ProviderManager(provider), converter).apply {
-            successHandler = miniApp.successHandler()
+            this.successHandler = successHandler
             failureHandler = AuthenticationEntryPointFailureHandler(entryPoint)
+        }
+    }
+
+    private fun traceSettings(vararg settings: Any) {
+        if (log.isTraceEnabled) {
+            log.trace("Telegram Mini App authentication: {}, entry point {}", settings.joinToString { it.javaClass.name }, entryPoint.javaClass.name)
         }
     }
 
@@ -67,5 +80,7 @@ public class TelegramConfigurer : AbstractHttpConfigurer<TelegramConfigurer, Htt
         /** New configurer. */
         @JvmStatic
         public fun telegram(): TelegramConfigurer = TelegramConfigurer()
+
+        private val log = LoggerFactory.getLogger(TelegramConfigurer::class.java)
     }
 }

@@ -1,6 +1,7 @@
 package io.github.kdanzoff.tgauth4j.spring.security
 
 import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.LoggerFactory
 import org.springframework.security.web.authentication.AuthenticationConverter
 
 /**
@@ -13,7 +14,17 @@ public class TelegramAuthenticationConverter(
 ) : AuthenticationConverter {
 
     override fun convert(request: HttpServletRequest): TelegramAuthenticationToken? {
-        val initData = initDataResolver.resolve(request) ?: return null
-        return TelegramAuthenticationToken.unauthenticated(initData, botTokenResolver.resolve(request))
+        val initData = initDataResolver.resolve(request)
+        if (initData == null) {
+            log.trace("No initData in {} {}, the request stays anonymous", request.method, request.requestURI)
+            return null
+        }
+        val key = botTokenResolver.resolve(request)
+        log.trace("initData found in {} {} ({} characters), to verify for bot {}", request.method, request.requestURI, initData.length, key.botId)
+        return TelegramAuthenticationToken.unauthenticated(initData, key)
+    }
+
+    private companion object {
+        private val log = LoggerFactory.getLogger(TelegramAuthenticationConverter::class.java)
     }
 }
