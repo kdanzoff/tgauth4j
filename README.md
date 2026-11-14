@@ -3,7 +3,7 @@
 Telegram Mini Apps and Login Widget authentication for the JVM: init data verification, Spring Security integration
 and Spring Boot starter.
 
-> Status: `0.1.0`, Mini Apps only. Login Widget support is planned. Not yet on Maven Central: install it locally with
+> Status: `0.1.1`, Mini Apps only. Login Widget support is planned. Not yet on Maven Central: install it locally with
 > `./gradlew publishToMavenLocal`.
 
 Requirements: Java 17+, Spring Security 7 / Spring Boot 4 for the Spring modules.
@@ -24,8 +24,8 @@ Group: `io.github.kdanzoff`.
 ```kotlin
 repositories { mavenLocal() }
 dependencies {
-    implementation("io.github.kdanzoff:tgauth4j-spring-boot-starter:0.1.0")
-    testImplementation("io.github.kdanzoff:tgauth4j-test:0.1.0")
+    implementation("io.github.kdanzoff:tgauth4j-spring-boot-starter:0.1.1")
+    testImplementation("io.github.kdanzoff:tgauth4j-test:0.1.1")
 }
 ```
 
