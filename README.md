@@ -3,8 +3,7 @@
 Telegram Mini Apps and Login Widget authentication for the JVM: init data verification, Spring Security integration
 and Spring Boot starter.
 
-> Status: `0.1.2`, Mini Apps only. Login Widget support is planned. Not yet on Maven Central: install it locally with
-> `./gradlew publishToMavenLocal`.
+> Status: `0.2.0`, Mini Apps only. Login Widget support is planned. Published on Maven Central.
 
 Requirements: Java 17+, Spring Security 7 / Spring Boot 4 for the Spring modules.
 
@@ -22,10 +21,10 @@ Group: `io.github.kdanzoff`.
 ## Spring Boot
 
 ```kotlin
-repositories { mavenLocal() }
+repositories { mavenCentral() }
 dependencies {
-    implementation("io.github.kdanzoff:tgauth4j-spring-boot-starter:0.1.2")
-    testImplementation("io.github.kdanzoff:tgauth4j-test:0.1.2")
+    implementation("io.github.kdanzoff:tgauth4j-spring-boot-starter:0.2.0")
+    testImplementation("io.github.kdanzoff:tgauth4j-test:0.2.0")
 }
 ```
 
@@ -138,6 +137,16 @@ A rejection names its cause: no `Authorization` header or another scheme, malfor
   shows ids only. Logs contain field names, the bot id, the user id, `auth_date` and authorities, never field values
   such as names or the raw `initData`.
 - Raw `initData` and the key are erased from the authentication once verified.
+
+## Releasing
+
+1. Set `version` in `gradle.properties`, commit, then push a tag `v<version>`.
+2. The `release` workflow builds, signs and uploads the artifacts to the Central Portal.
+3. Check the deployment on [central.sonatype.com](https://central.sonatype.com/publishing/deployments) and click
+   *Publish*. A published version can never be changed nor deleted.
+
+Secrets of the repository: `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD` (Central Portal user token), `SIGNING_KEY`
+(armored private GPG key) and `SIGNING_PASSWORD`.
 
 ## License
 

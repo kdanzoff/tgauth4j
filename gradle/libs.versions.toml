@@ -1,5 +1,7 @@
 [versions]
 kotlin = "2.3.21"
+maven-publish = "0.37.0"  # com.vanniktech.maven.publish: Central Portal upload, signing
+dokka = "2.3.0"           # Javadoc jar required by Maven Central
 spring-boot = "4.1.2"   # BOM: versions of Spring Security, Spring Framework, Jackson, JUnit
 kotlin-result = "2.3.1"
 archunit = "1.5.1"
@@ -7,6 +9,8 @@ archunit = "1.5.1"
 [libraries]
 # Gradle plugins, used by build-logic
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+maven-publish-gradle-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "maven-publish" }
+dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 
 # BOM
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
