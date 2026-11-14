@@ -3,51 +3,51 @@ package io.github.kdanzoff.tgauth4j.test
 import java.time.Instant
 
 /**
- * Contenu d'un `initData` de test, signé par [TelegramTestInitData.signed] comme le fait Telegram.
+ * Content of a test `initData`, signed by [TelegramTestInitData.signed] the way Telegram does.
  *
- * Par défaut : utilisateur `1`, prénom `Test`, signé à l'instant présent.
+ * Defaults: user `1`, first name `Test`, signed now.
  */
 public class InitDataSpec {
 
-    /** Identifiant Telegram de l'utilisateur. */
+    /** Telegram id of the user. */
     public var userId: Long = 1
 
-    /** Prénom. */
+    /** First name. */
     public var firstName: String = "Test"
 
-    /** Nom de famille. */
+    /** Last name. */
     public var lastName: String? = null
 
-    /** Pseudonyme `@…`. */
+    /** `@…` handle. */
     public var username: String? = null
 
-    /** Langue. */
+    /** Language. */
     public var languageCode: String? = null
 
-    /** Moment de la signature (`auth_date`). */
+    /** Signing time (`auth_date`). */
     public var authDate: Instant = Instant.now()
 
-    /** Identifiant de la session de la Mini App. */
+    /** Mini App session id. */
     public var queryId: String? = "AAHdF6IQAAAAAN0XohDhrOrc"
 
-    /** Paramètre `startapp`. */
+    /** `startapp` parameter. */
     public var startParam: String? = null
 
-    /** Champs supplémentaires, ajoutés tels quels. */
+    /** Extra fields, added as is. */
     public val extraFields: MutableMap<String, String> = mutableMapOf()
 
-    /** Méthodes chaînables pour Java. */
+    /** Chainable methods for Java. */
     public fun userId(userId: Long): InitDataSpec = apply { this.userId = userId }
 
-    /** Voir [firstName]. */
+    /** See [firstName]. */
     public fun firstName(firstName: String): InitDataSpec = apply { this.firstName = firstName }
 
-    /** Voir [username]. */
+    /** See [username]. */
     public fun username(username: String?): InitDataSpec = apply { this.username = username }
 
-    /** Voir [authDate]. */
+    /** See [authDate]. */
     public fun authDate(authDate: Instant): InitDataSpec = apply { this.authDate = authDate }
 
-    /** Voir [startParam]. */
+    /** See [startParam]. */
     public fun startParam(startParam: String?): InitDataSpec = apply { this.startParam = startParam }
 }

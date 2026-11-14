@@ -6,8 +6,8 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 
 /**
- * 401 par défaut, sans corps : `WWW-Authenticate: tma`, avec `error="init_data_invalid"` ou
- * `error="init_data_expired"` quand `initData` a été refusé ([InvalidInitDataException.errorCode]).
+ * Default 401, without a body: `WWW-Authenticate: tma`, with `error="init_data_invalid"` or
+ * `error="init_data_expired"` when `initData` was rejected ([InvalidInitDataException.errorCode]).
  */
 public class TelegramAuthenticationEntryPoint : AuthenticationEntryPoint {
 

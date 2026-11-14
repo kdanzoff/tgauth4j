@@ -31,7 +31,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
 
-/** Chaîne Spring Security configurée par le DSL Kotlin ou l'API Java, de bout en bout avec MockMvc. */
+/** Spring Security chain configured by the Kotlin DSL or the Java API, end to end with MockMvc. */
 class TelegramConfigurerIntegrationTest {
 
     private fun mvc(vararg configurations: Class<*>): MockMvc {

@@ -1,23 +1,23 @@
 package io.github.kdanzoff.tgauth4j.core
 
-/** Résultat de [TelegramInitDataVerifier.verify] : jamais d'exception pour un `initData` refusé. */
+/** Result of [TelegramInitDataVerifier.verify]: a rejected `initData` never throws. */
 public sealed interface VerificationResult {
 
-    /** `initData` authentique et récent. */
+    /** Authentic and fresh `initData`. */
     public data class Valid(val initData: TelegramInitData) : VerificationResult
 
-    /** `initData` refusé, pour la raison [reason]. */
+    /** Rejected `initData`, for [reason]. */
     public data class Invalid(val reason: InvalidReason) : VerificationResult
 }
 
-/** Raison du refus d'un `initData`. */
+/** Why an `initData` was rejected. */
 public enum class InvalidReason {
-    /** Vide, mal formé, sans `hash`, sans utilisateur valide ou daté du futur. */
+    /** Blank, malformed, without `hash`, without a valid user, or dated in the future. */
     MALFORMED,
 
-    /** Signature fausse : altéré, ou signé pour un autre bot. */
+    /** Wrong signature: tampered with, or signed for another bot. */
     BAD_SIGNATURE,
 
-    /** Trop ancien : la Mini App doit être rouverte. */
+    /** Too old: the Mini App must be reopened. */
     EXPIRED,
 }

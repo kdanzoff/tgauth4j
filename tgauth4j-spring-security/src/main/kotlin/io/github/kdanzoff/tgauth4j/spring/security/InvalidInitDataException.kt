@@ -4,13 +4,13 @@ import io.github.kdanzoff.tgauth4j.core.InvalidReason
 import org.springframework.security.authentication.BadCredentialsException
 
 /**
- * `initData` refusé (401). Le message ne contient que la raison, jamais les données.
+ * Rejected `initData` (401). The message contains the reason only, never the data.
  *
- * @property reason raison du refus.
+ * @property reason why it was rejected.
  */
 public class InvalidInitDataException(public val reason: InvalidReason) : BadCredentialsException("init data rejected: $reason") {
 
-    /** Code d'erreur pour le client : `init_data_expired` (rouvrir la Mini App) ou `init_data_invalid`. */
+    /** Error code for the client: `init_data_expired` (reopen the Mini App) or `init_data_invalid`. */
     public val errorCode: String
         get() = if (reason == InvalidReason.EXPIRED) "init_data_expired" else "init_data_invalid"
 }

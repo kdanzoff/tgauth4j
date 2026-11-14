@@ -7,7 +7,7 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 /**
- * `initData` de test, signés avec le jeton d'un bot de test selon l'algorithme de la documentation de Telegram.
+ * Test `initData`, signed with a test bot token using the algorithm from the Telegram documentation.
  *
  * ```
  * mockMvc.get("/api/me") { with(TelegramTestInitData.telegramInitData(BOT_TOKEN) { userId = 42 }) }
@@ -17,16 +17,16 @@ public object TelegramTestInitData {
 
     private val json = JsonMapper.builder().build()
 
-    /** `initData` décrit par [spec], signé avec [botToken]. */
+    /** `initData` described by [spec], signed with [botToken]. */
     @JvmStatic
     @JvmOverloads
     public fun signed(botToken: String, spec: InitDataSpec.() -> Unit = {}): String = sign(botToken, InitDataSpec().apply(spec))
 
-    /** Pour Java : `initData` décrit par [spec], signé avec [botToken]. */
+    /** For Java: `initData` described by [spec], signed with [botToken]. */
     @JvmStatic
     public fun signed(botToken: String, spec: InitDataSpec): String = sign(botToken, spec)
 
-    /** En-tête `Authorization: tma <initData>` d'une requête MockMvc (dépendance `spring-test` requise). */
+    /** `Authorization: tma <initData>` header of a MockMvc request (requires the `spring-test` dependency). */
     @JvmStatic
     @JvmOverloads
     public fun telegramInitData(botToken: String, spec: InitDataSpec.() -> Unit = {}): RequestPostProcessor {

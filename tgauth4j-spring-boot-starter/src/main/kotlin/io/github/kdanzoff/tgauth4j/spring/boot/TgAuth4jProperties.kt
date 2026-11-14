@@ -5,10 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import java.time.Duration
 
 /**
- * Propriétés `tgauth4j.*`.
+ * `tgauth4j.*` properties.
  *
- * @property botToken jeton du bot (`<identifiant>:<secret>`) ; sans lui, aucun [io.github.kdanzoff.tgauth4j.spring.security.BotTokenResolver] n'est créé.
- * @property initDataMaxAge âge maximal d'`initData`.
+ * @property botToken bot token (`<id>:<secret>`); without it, no [io.github.kdanzoff.tgauth4j.spring.security.BotTokenResolver] is created.
+ * @property initDataMaxAge maximum age of `initData`.
  */
 @ConfigurationProperties("tgauth4j")
 public class TgAuth4jProperties {

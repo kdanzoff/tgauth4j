@@ -9,15 +9,15 @@ import java.time.Clock
 import java.time.Duration
 
 /**
- * Réglages de l'authentification des Mini Apps dans [TelegramConfigurer.miniApp]. Chaque réglage absent est pris
- * dans le contexte Spring (bean du même type), sinon a une valeur par défaut :
+ * Mini Apps authentication settings in [TelegramConfigurer.miniApp]. Each missing setting is taken from the Spring
+ * context (bean of the same type), otherwise from a default:
  *
- * - vérificateur : [verifier], sinon bean [TelegramInitDataVerifier], sinon construit avec [maxAge] et [clock]
- *   (bean [Clock], sinon horloge système) ;
- * - jeton du bot : [botTokenResolver] ou [botToken], sinon bean [BotTokenResolver] — **obligatoire** ;
- * - `initData` : [initDataResolver], sinon en-tête `Authorization: tma` ;
- * - utilisateurs : [userDetailsService], sinon bean [UserDetailsService] unique, sinon [DefaultTelegramUserDetailsService] ;
- * - après succès : [authenticationSuccessHandler], sinon la requête continue.
+ * - verifier: [verifier], else a [TelegramInitDataVerifier] bean, else one built with [maxAge] and [clock]
+ *   ([Clock] bean, else the system clock);
+ * - bot token: [botTokenResolver] or [botToken], else a [BotTokenResolver] bean — **required**;
+ * - `initData`: [initDataResolver], else the `Authorization: tma` header;
+ * - users: [userDetailsService], else the unique [UserDetailsService] bean, else [DefaultTelegramUserDetailsService];
+ * - after success: [authenticationSuccessHandler], else the request continues.
  */
 public class MiniAppConfigurer internal constructor() {
 
@@ -29,28 +29,28 @@ public class MiniAppConfigurer internal constructor() {
     private var userDetailsService: UserDetailsService? = null
     private var successHandler: AuthenticationSuccessHandler? = null
 
-    /** Vérificateur ; prioritaire sur [maxAge] et [clock]. */
+    /** Verifier; takes precedence over [maxAge] and [clock]. */
     public fun verifier(verifier: TelegramInitDataVerifier): MiniAppConfigurer = apply { this.verifier = verifier }
 
-    /** Âge maximal d'`initData`. */
+    /** Maximum age of `initData`. */
     public fun maxAge(maxAge: Duration): MiniAppConfigurer = apply { this.maxAge = maxAge }
 
-    /** Horloge du vérificateur. */
+    /** Clock of the verifier. */
     public fun clock(clock: Clock): MiniAppConfigurer = apply { this.clock = clock }
 
-    /** Un seul bot, de jeton [token]. */
+    /** Single bot, with token [token]. */
     public fun botToken(token: BotToken): MiniAppConfigurer = botTokenResolver(DefaultBotTokenResolver(token))
 
-    /** Jeton du bot de chaque requête. */
+    /** Bot token of each request. */
     public fun botTokenResolver(resolver: BotTokenResolver): MiniAppConfigurer = apply { this.botTokenResolver = resolver }
 
-    /** Lecture d'`initData` dans la requête. */
+    /** Reads `initData` from the request. */
     public fun initDataResolver(resolver: InitDataResolver): MiniAppConfigurer = apply { this.initDataResolver = resolver }
 
-    /** Chargement des utilisateurs : [TelegramUserDetailsService] ou simple [UserDetailsService]. */
+    /** Loads users: a [TelegramUserDetailsService] or a plain [UserDetailsService]. */
     public fun userDetailsService(service: UserDetailsService): MiniAppConfigurer = apply { this.userDetailsService = service }
 
-    /** Suite d'une authentification réussie ; la requête doit continuer (`chain.doFilter`). */
+    /** Called after a successful authentication; the request must continue (`chain.doFilter`). */
     public fun authenticationSuccessHandler(handler: AuthenticationSuccessHandler): MiniAppConfigurer = apply { this.successHandler = handler }
 
     internal fun verifier(context: ApplicationContext?): TelegramInitDataVerifier =

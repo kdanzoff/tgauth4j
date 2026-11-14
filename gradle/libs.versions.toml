@@ -1,16 +1,16 @@
 [versions]
 kotlin = "2.3.21"
-spring-boot = "4.1.2"   # BOM : versions de Spring Security, Spring Framework, Jackson, JUnit
+spring-boot = "4.1.2"   # BOM: versions of Spring Security, Spring Framework, Jackson, JUnit
 archunit = "1.5.1"
 
 [libraries]
-# Plugins Gradle, utilisés par build-logic
+# Gradle plugins, used by build-logic
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 # BOM
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 
-# Versions du BOM
+# BOM versions
 jackson-databind = { module = "tools.jackson.core:jackson-databind" }
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 spring-security-config = { module = "org.springframework.security:spring-security-config" }

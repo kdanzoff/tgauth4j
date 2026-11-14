@@ -5,19 +5,19 @@ import java.time.Duration
 import java.time.Instant
 
 /**
- * Vérifie `initData`, la chaîne que Telegram signe à l'ouverture d'une Mini App.
+ * Verifies `initData`, the string Telegram signs when a Mini App is opened.
  *
- * Avec un [BotToken] :
- * 1. la clé secrète est `HMAC-SHA256(clé = "WebAppData", message = jeton du bot)` ;
- * 2. la signature attendue est `HMAC-SHA256(clé = secret, message = champs triés « clé=valeur » séparés par un saut
- *    de ligne, sans hash)`, en hexadécimal, comparée en **temps constant** ;
- * 3. `auth_date` ne doit pas dater de plus de [maxAge], ni du futur au-delà d'une minute de décalage d'horloge.
+ * With a [BotToken]:
+ * 1. the secret key is `HMAC-SHA256(key = "WebAppData", message = bot token)`;
+ * 2. the expected signature is `HMAC-SHA256(key = secret, message = fields sorted as "key=value" separated by a line
+ *    feed, without hash)`, in hexadecimal, compared in **constant time**;
+ * 3. `auth_date` must not be older than [maxAge], nor in the future beyond one minute of clock skew.
  *
- * Configuration au constructeur, données de la requête à l'appel. Rien de ce qui est lu n'est journalisé ni repris
- * dans un message : `initData` contient le nom de l'utilisateur.
+ * Configuration goes to the constructor, request data to the call. Nothing read is logged or included in a message:
+ * `initData` contains the user's name.
  *
- * @param maxAge âge maximal d'`initData` (1 heure par défaut).
- * @param clock horloge, pour les tests.
+ * @param maxAge maximum age of `initData` (1 hour by default).
+ * @param clock clock, for tests.
  */
 public class TelegramInitDataVerifier @JvmOverloads constructor(
     private val maxAge: Duration = DEFAULT_MAX_AGE,
@@ -28,7 +28,7 @@ public class TelegramInitDataVerifier @JvmOverloads constructor(
         require(!maxAge.isNegative && !maxAge.isZero) { "maxAge must be positive" }
     }
 
-    /** Vérifie [initData] avec [key] ; un refus est un [VerificationResult.Invalid], jamais une exception. */
+    /** Verifies [initData] with [key]; a rejection is a [VerificationResult.Invalid], never an exception. */
     public fun verify(initData: String, key: VerificationKey): VerificationResult {
         val fields = InitDataFields.parse(initData) ?: return invalid(InvalidReason.MALFORMED)
         return when (key) {
@@ -71,9 +71,9 @@ public class TelegramInitDataVerifier @JvmOverloads constructor(
 
     private fun invalid(reason: InvalidReason) = VerificationResult.Invalid(reason)
 
-    /** Valeurs par défaut. */
+    /** Default values. */
     public companion object {
-        /** Âge maximal par défaut d'`initData`. */
+        /** Default maximum age of `initData`. */
         @JvmField
         public val DEFAULT_MAX_AGE: Duration = Duration.ofHours(1)
 

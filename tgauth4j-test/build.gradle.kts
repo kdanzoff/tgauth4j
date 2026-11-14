@@ -1,4 +1,4 @@
-// Aides de test : initData signés comme par Telegram, en-tête MockMvc.
+// Test helpers: initData signed the way Telegram does, MockMvc header.
 plugins {
     id("tgauth4j.library-conventions")
 }

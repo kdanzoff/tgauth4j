@@ -5,10 +5,10 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 /**
- * Utilisateur par défaut ([DefaultTelegramUserDetailsService]) : l'utilisateur Telegram et ses [authorities], sans mot
- * de passe. Le nom est l'identifiant Telegram.
+ * Default user ([DefaultTelegramUserDetailsService]): the Telegram user and its [authorities], without a password.
+ * The username is the Telegram id.
  *
- * @property user utilisateur Telegram vérifié.
+ * @property user verified Telegram user.
  */
 public class TelegramUserDetails(
     public val user: TelegramUser,

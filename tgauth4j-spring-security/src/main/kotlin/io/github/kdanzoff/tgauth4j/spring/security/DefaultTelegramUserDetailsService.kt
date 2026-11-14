@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 
-/** Sans [org.springframework.security.core.userdetails.UserDetailsService] fourni : tout utilisateur vérifié a `ROLE_USER`. */
+/** Used when no [org.springframework.security.core.userdetails.UserDetailsService] is provided: every verified user gets `ROLE_USER`. */
 public class DefaultTelegramUserDetailsService : TelegramUserDetailsService {
 
     override fun loadUserByInitData(initData: TelegramInitData): UserDetails =

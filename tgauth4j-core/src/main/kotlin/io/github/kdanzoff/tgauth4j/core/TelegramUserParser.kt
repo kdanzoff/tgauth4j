@@ -3,12 +3,12 @@ package io.github.kdanzoff.tgauth4j.core
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.json.JsonMapper
 
-/** Lecture du champ JSON `user` d'`initData`. */
+/** Reads the JSON `user` field of `initData`. */
 internal object TelegramUserParser {
 
     private val json = JsonMapper.builder().build()
 
-    /** Utilisateur décrit par [user], ou `null` s'il est mal formé, sans identifiant positif ou sans prénom. */
+    /** User described by [user], or `null` if it is malformed, has no positive id or no first name. */
     fun parse(user: String): TelegramUser? {
         val node = runCatching { json.readTree(user) }.getOrNull() ?: return null
         val id = node.get("id")?.takeIf { it.isIntegralNumber }?.longValue()?.takeIf { it > 0 } ?: return null

@@ -1,4 +1,4 @@
-// Intégration Spring Security : jeton, fournisseur, configurateur et DSL Kotlin telegram { }.
+// Spring Security integration: token, provider, configurer and Kotlin DSL telegram { }.
 plugins {
     id("tgauth4j.library-conventions")
 }

@@ -6,22 +6,22 @@ import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
 
 /**
- * Authentification Spring Security d'un utilisateur de Mini App.
+ * Spring Security authentication of a Mini App user.
  *
- * - avant vérification ([unauthenticated]) : `initData` brut et clé de vérification ;
- * - après vérification ([authenticated]) : le [UserDetails] chargé, ses rôles et l'[initData] vérifié.
+ * - before verification ([unauthenticated]): raw `initData` and verification key;
+ * - after verification ([authenticated]): the loaded [UserDetails], its authorities and the verified [initData].
  *
- * `initData` brut et clé sont effacés après l'authentification ([eraseCredentials]) ; [toString] ne montre que le nom.
+ * Raw `initData` and key are erased after authentication ([eraseCredentials]); [toString] shows the name only.
  */
 public class TelegramAuthenticationToken private constructor(
     private var rawInitData: String?,
     private var key: VerificationKey?,
     private val user: UserDetails?,
-    /** `initData` vérifié ; `null` avant vérification. */
+    /** Verified `initData`; `null` before verification. */
     public val initData: TelegramInitData?,
 ) : AbstractAuthenticationToken(user?.authorities ?: emptyList()) {
 
-    /** Clé de vérification ; `null` après vérification. */
+    /** Verification key; `null` after verification. */
     public val verificationKey: VerificationKey? get() = key
 
     override fun getCredentials(): Any? = rawInitData
@@ -38,15 +38,15 @@ public class TelegramAuthenticationToken private constructor(
 
     override fun toString(): String = "TelegramAuthenticationToken(name=$name, authenticated=$isAuthenticated, authorities=$authorities)"
 
-    /** Fabriques : avant et après vérification. */
+    /** Factories: before and after verification. */
     public companion object {
 
-        /** `initData` reçu, à vérifier avec [key]. */
+        /** Received `initData`, to be verified with [key]. */
         @JvmStatic
         public fun unauthenticated(initData: String, key: VerificationKey): TelegramAuthenticationToken =
             TelegramAuthenticationToken(initData, key, null, null)
 
-        /** Utilisateur [user] authentifié par [initData]. */
+        /** User [user] authenticated by [initData]. */
         @JvmStatic
         public fun authenticated(user: UserDetails, initData: TelegramInitData): TelegramAuthenticationToken =
             TelegramAuthenticationToken(null, null, user, initData).apply { isAuthenticated = true }

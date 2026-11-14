@@ -1,5 +1,5 @@
-// Conventions des modules de tgauth4j : Kotlin à API explicite, bytecode Java 17 (minimum de Spring Boot 4),
-// publication Maven (jar, sources, POM) sous io.github.kdanzoff.
+// tgauth4j module conventions: Kotlin explicit API, Java 17 bytecode (Spring Boot 4 minimum),
+// Maven publication (jar, sources, POM) under io.github.kdanzoff.
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {

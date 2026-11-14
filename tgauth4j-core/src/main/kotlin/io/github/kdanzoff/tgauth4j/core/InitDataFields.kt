@@ -2,17 +2,17 @@ package io.github.kdanzoff.tgauth4j.core
 
 import java.net.URLDecoder
 
-/** Lecture des champs d'`initData` (`clé=valeur` encodés en URL, séparés par `&`). */
+/** Reads the fields of `initData` (URL-encoded `key=value` pairs separated by `&`). */
 internal object InitDataFields {
 
-    /** Champs décodés, ou `null` si [initData] est vide ou mal formé. */
+    /** Decoded fields, or `null` if [initData] is blank or malformed. */
     fun parse(initData: String): Map<String, String>? {
         val pairs = initData.split('&')
         if (initData.isBlank() || pairs.any { it.indexOf('=') <= 0 }) return null
         return runCatching { pairs.associate(::decode) }.getOrNull()
     }
 
-    /** Chaîne signée : champs triés par clé, `clé=valeur` séparés par un saut de ligne, sans [excluded]. */
+    /** Signed string: fields sorted by key, `key=value` separated by a line feed, without [excluded]. */
     fun dataCheckString(fields: Map<String, String>, excluded: String): String =
         fields.filterKeys { it != excluded }.toSortedMap().entries.joinToString("\n") { "${it.key}=${it.value}" }
 

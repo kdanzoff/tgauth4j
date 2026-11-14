@@ -5,7 +5,7 @@ import com.tngtech.archunit.core.importer.ImportOption
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses
 import org.junit.jupiter.api.Test
 
-/** Dépendances entre les modules de la bibliothèque. */
+/** Dependencies between the library modules. */
 class LibraryArchitectureTest {
 
     private val classes = ClassFileImporter().withImportOption(ImportOption.DoNotIncludeTests()).importPackages(ROOT)

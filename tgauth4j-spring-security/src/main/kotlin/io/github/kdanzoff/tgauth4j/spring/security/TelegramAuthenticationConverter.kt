@@ -4,8 +4,8 @@ import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.web.authentication.AuthenticationConverter
 
 /**
- * Lit l'`initData` de la requête ([initDataResolver]) et le jeton du bot ([botTokenResolver]). Sans `initData` :
- * `null`, la requête reste anonyme et le point d'entrée répond 401.
+ * Reads the request's `initData` ([initDataResolver]) and the bot token ([botTokenResolver]). Without `initData`:
+ * `null`, the request stays anonymous and the entry point answers 401.
  */
 public class TelegramAuthenticationConverter(
     private val initDataResolver: InitDataResolver,

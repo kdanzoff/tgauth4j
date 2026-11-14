@@ -4,7 +4,7 @@ import java.security.MessageDigest
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-/** HMAC-SHA256 et comparaison de signatures en temps constant. */
+/** HMAC-SHA256 and constant-time signature comparison. */
 internal object Hmac {
 
     private const val ALGORITHM = "HmacSHA256"
@@ -14,7 +14,7 @@ internal object Hmac {
 
     fun hex(bytes: ByteArray): String = bytes.joinToString("") { "%02x".format(it) }
 
-    /** Compare deux signatures hexadécimales en temps constant, sans tenir compte de la casse. */
+    /** Compares two hexadecimal signatures in constant time, ignoring case. */
     fun sameHex(expected: String, received: String): Boolean =
         MessageDigest.isEqual(expected.toByteArray(Charsets.UTF_8), received.lowercase().toByteArray(Charsets.UTF_8))
 }

@@ -1,13 +1,13 @@
 package io.github.kdanzoff.tgauth4j.core
 
 /**
- * Clé de vérification d'un `initData`, propre à un bot.
+ * Key used to verify an `initData`, specific to one bot.
  *
- * Seul [BotToken] existe aujourd'hui (signature HMAC-SHA256, avec le jeton du bot). Une clé publique de Telegram
- * (signature Ed25519, sans le jeton) pourra s'ajouter sans changer [TelegramInitDataVerifier.verify].
+ * Only [BotToken] exists today (HMAC-SHA256 signature, with the bot token). A Telegram public key (Ed25519 signature,
+ * without the token) can be added later without changing [TelegramInitDataVerifier.verify].
  */
 public sealed interface VerificationKey {
 
-    /** Identifiant du bot pour lequel `initData` est signé. */
+    /** Id of the bot `initData` is signed for. */
     public val botId: Long
 }

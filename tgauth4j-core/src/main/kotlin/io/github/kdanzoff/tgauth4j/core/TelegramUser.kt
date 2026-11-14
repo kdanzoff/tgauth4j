@@ -1,17 +1,17 @@
 package io.github.kdanzoff.tgauth4j.core
 
 /**
- * Utilisateur Telegram, lu dans le champ `user` d'`initData`.
+ * Telegram user, read from the `user` field of `initData`.
  *
- * Données personnelles : [toString] ne montre que [id].
+ * Personal data: [toString] shows [id] only.
  *
- * @property id identifiant Telegram, stable.
- * @property firstName prénom.
- * @property lastName nom de famille, s'il est renseigné.
- * @property username pseudonyme `@…`, facultatif et modifiable : ne pas s'en servir comme identifiant.
- * @property languageCode langue de l'application Telegram (IETF), si connue.
- * @property isPremium abonné Telegram Premium.
- * @property photoUrl adresse de la photo de profil, si Telegram la fournit.
+ * @property id Telegram id, stable.
+ * @property firstName first name.
+ * @property lastName last name, if set.
+ * @property username `@…` handle, optional and changeable: do not use it as an identifier.
+ * @property languageCode language of the Telegram app (IETF tag), if known.
+ * @property isPremium Telegram Premium subscriber.
+ * @property photoUrl profile photo URL, if Telegram provides it.
  */
 public data class TelegramUser(
     val id: Long,

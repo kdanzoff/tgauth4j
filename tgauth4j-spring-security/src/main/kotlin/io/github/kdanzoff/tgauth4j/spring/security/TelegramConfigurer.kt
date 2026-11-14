@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.AuthenticationFilter
 import org.springframework.security.web.util.matcher.AnyRequestMatcher
 
 /**
- * Configurateur Spring Security de l'authentification Telegram, sur le modèle d'`OAuth2ResourceServerConfigurer` :
+ * Spring Security configurer for Telegram authentication, modelled on `OAuth2ResourceServerConfigurer`:
  *
  * ```java
  * http.with(TelegramConfigurer.telegram(), telegram -> telegram
@@ -21,25 +21,25 @@ import org.springframework.security.web.util.matcher.AnyRequestMatcher
  *     .authenticationEntryPoint(entryPoint));
  * ```
  *
- * En Kotlin : `http { telegram { miniApp { … } } }` ([telegram]).
+ * In Kotlin: `http { telegram { miniApp { … } } }` ([telegram]).
  *
- * - `init` : [TelegramAuthenticationEntryPoint] (ou [authenticationEntryPoint]) devient le point d'entrée **par
- *   défaut** de la chaîne ; un point d'entrée déclaré dans `exceptionHandling` reste prioritaire ;
- * - `configure` : un `AuthenticationFilter` (lecture par [TelegramAuthenticationConverter], vérification par
- *   [TelegramAuthenticationProvider]) avant l'autorisation des requêtes, sans redirection ni session ; un refus
- *   d'`initData` passe par le même point d'entrée.
+ * - `init`: [TelegramAuthenticationEntryPoint] (or [authenticationEntryPoint]) becomes the **default** entry point of
+ *   the chain; an entry point declared in `exceptionHandling` still takes precedence;
+ * - `configure`: an `AuthenticationFilter` (reading by [TelegramAuthenticationConverter], verification by
+ *   [TelegramAuthenticationProvider]) before request authorization, without redirect or session; a rejected
+ *   `initData` goes through the same entry point.
  *
- * Seules les Mini Apps sont prises en charge pour l'instant ([miniApp]).
+ * Only Mini Apps are supported for now ([miniApp]).
  */
 public class TelegramConfigurer : AbstractHttpConfigurer<TelegramConfigurer, HttpSecurity>() {
 
     private val miniApp = MiniAppConfigurer()
     private var entryPoint: AuthenticationEntryPoint = TelegramAuthenticationEntryPoint()
 
-    /** Réglages des Mini Apps ([MiniAppConfigurer]). */
+    /** Mini Apps settings ([MiniAppConfigurer]). */
     public fun miniApp(customizer: Customizer<MiniAppConfigurer>): TelegramConfigurer = apply { customizer.customize(miniApp) }
 
-    /** Réponse à une requête non authentifiée ou à un `initData` refusé (401). */
+    /** Response to an unauthenticated request or a rejected `initData` (401). */
     public fun authenticationEntryPoint(entryPoint: AuthenticationEntryPoint): TelegramConfigurer = apply { this.entryPoint = entryPoint }
 
     override fun init(http: HttpSecurity) {
@@ -61,10 +61,10 @@ public class TelegramConfigurer : AbstractHttpConfigurer<TelegramConfigurer, Htt
         }
     }
 
-    /** Point d'entrée Java : `http.with(TelegramConfigurer.telegram(), …)`. */
+    /** Java entry point: `http.with(TelegramConfigurer.telegram(), …)`. */
     public companion object {
 
-        /** Nouveau configurateur. */
+        /** New configurer. */
         @JvmStatic
         public fun telegram(): TelegramConfigurer = TelegramConfigurer()
     }

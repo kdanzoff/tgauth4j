@@ -3,17 +3,17 @@ package io.github.kdanzoff.tgauth4j.core
 import java.time.Instant
 
 /**
- * `initData` vérifié : ce que Telegram a signé à l'ouverture de la Mini App.
+ * Verified `initData`: what Telegram signed when the Mini App was opened.
  *
- * Données personnelles : [toString] ne montre que l'identifiant de l'utilisateur et [authDate].
+ * Personal data: [toString] shows the user id and [authDate] only.
  *
- * @property user utilisateur qui a ouvert la Mini App.
- * @property authDate moment de la signature par Telegram.
- * @property queryId identifiant de la session de la Mini App, pour `answerWebAppQuery`, s'il est présent.
- * @property startParam paramètre `startapp` du lien d'ouverture, s'il est présent.
- * @property chatType type de discussion d'où la Mini App a été ouverte, s'il est présent.
- * @property chatInstance identifiant de cette discussion, s'il est présent.
- * @property fields tous les champs reçus, décodés (y compris ceux que la bibliothèque ne lit pas).
+ * @property user user who opened the Mini App.
+ * @property authDate time Telegram signed the data.
+ * @property queryId Mini App session id, for `answerWebAppQuery`, if present.
+ * @property startParam `startapp` parameter of the opening link, if present.
+ * @property chatType type of the chat the Mini App was opened from, if present.
+ * @property chatInstance id of that chat, if present.
+ * @property fields every received field, decoded (including those the library does not read).
  */
 public data class TelegramInitData(
     val user: TelegramUser,

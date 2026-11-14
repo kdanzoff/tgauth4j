@@ -2,14 +2,14 @@ package io.github.kdanzoff.tgauth4j.spring.security
 
 import jakarta.servlet.http.HttpServletRequest
 
-/** Lecture de l'`initData` brut d'une requête. */
+/** Reads the raw `initData` of a request. */
 public fun interface InitDataResolver {
 
-    /** `initData` de [request], ou `null` s'il n'y en a pas (la requête reste anonyme). */
+    /** `initData` of [request], or `null` if there is none (the request stays anonymous). */
     public fun resolve(request: HttpServletRequest): String?
 }
 
-/** `Authorization: tma <initData>`, le schéma recommandé par Telegram ; autre schéma ou absence : `null`. */
+/** `Authorization: tma <initData>`, the scheme recommended by Telegram; another scheme or no header: `null`. */
 public class HeaderInitDataResolver : InitDataResolver {
 
     override fun resolve(request: HttpServletRequest): String? =

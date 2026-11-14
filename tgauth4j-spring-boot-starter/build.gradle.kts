@@ -1,4 +1,4 @@
-// Autoconfiguration Spring Boot : propriétés tgauth4j.*, vérificateur et jeton du bot.
+// Spring Boot auto-configuration: tgauth4j.* properties, verifier and bot token.
 plugins {
     id("tgauth4j.library-conventions")
 }

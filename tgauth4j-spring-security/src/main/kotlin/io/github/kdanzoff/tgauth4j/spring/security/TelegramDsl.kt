@@ -9,12 +9,12 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import java.time.Clock
 import java.time.Duration
 
-/** Délimite le DSL : `miniApp { }` ne voit pas les réglages de `telegram { }`. */
+/** Scopes the DSL: `miniApp { }` does not see the settings of `telegram { }`. */
 @DslMarker
 public annotation class TelegramSecurityMarker
 
 /**
- * Authentification Telegram dans le DSL Kotlin de Spring Security, comme `oauth2ResourceServer { }` :
+ * Telegram authentication in the Spring Security Kotlin DSL, like `oauth2ResourceServer { }`:
  *
  * ```
  * http {
@@ -29,23 +29,23 @@ public annotation class TelegramSecurityMarker
  * }
  * ```
  *
- * Voir [TelegramConfigurer] et [MiniAppConfigurer] pour les valeurs par défaut.
+ * See [TelegramConfigurer] and [MiniAppConfigurer] for the defaults.
  */
 public fun HttpSecurityDsl.telegram(configuration: TelegramDsl.() -> Unit) {
     val dsl = TelegramDsl().apply(configuration)
     this.with(TelegramConfigurer.telegram()) { dsl.applyTo(this) }
 }
 
-/** Réglages de `telegram { }`. */
+/** Settings of `telegram { }`. */
 @TelegramSecurityMarker
 public class TelegramDsl internal constructor() {
 
-    /** Réponse 401 ; [TelegramAuthenticationEntryPoint] par défaut. */
+    /** 401 response; [TelegramAuthenticationEntryPoint] by default. */
     public var authenticationEntryPoint: AuthenticationEntryPoint? = null
 
     private var miniApp: MiniAppDsl.() -> Unit = {}
 
-    /** Réglages des Mini Apps. */
+    /** Mini Apps settings. */
     public fun miniApp(configuration: MiniAppDsl.() -> Unit) {
         miniApp = configuration
     }
@@ -56,32 +56,32 @@ public class TelegramDsl internal constructor() {
     }
 }
 
-/** Réglages de `miniApp { }` ; voir [MiniAppConfigurer]. */
+/** Settings of `miniApp { }`; see [MiniAppConfigurer]. */
 @TelegramSecurityMarker
 public class MiniAppDsl internal constructor() {
 
-    /** Vérificateur ; prioritaire sur [maxAge] et [clock]. */
+    /** Verifier; takes precedence over [maxAge] and [clock]. */
     public var verifier: TelegramInitDataVerifier? = null
 
-    /** Âge maximal d'`initData`. */
+    /** Maximum age of `initData`. */
     public var maxAge: Duration? = null
 
-    /** Horloge du vérificateur. */
+    /** Clock of the verifier. */
     public var clock: Clock? = null
 
-    /** Un seul bot, de ce jeton. */
+    /** Single bot, with this token. */
     public var botToken: BotToken? = null
 
-    /** Jeton du bot de chaque requête ; prioritaire sur [botToken]. */
+    /** Bot token of each request; takes precedence over [botToken]. */
     public var botTokenResolver: BotTokenResolver? = null
 
-    /** Lecture d'`initData` dans la requête. */
+    /** Reads `initData` from the request. */
     public var initDataResolver: InitDataResolver? = null
 
-    /** Chargement des utilisateurs. */
+    /** Loads users. */
     public var userDetailsService: UserDetailsService? = null
 
-    /** Suite d'une authentification réussie. */
+    /** Called after a successful authentication. */
     public var authenticationSuccessHandler: AuthenticationSuccessHandler? = null
 
     internal fun applyTo(configurer: MiniAppConfigurer) {

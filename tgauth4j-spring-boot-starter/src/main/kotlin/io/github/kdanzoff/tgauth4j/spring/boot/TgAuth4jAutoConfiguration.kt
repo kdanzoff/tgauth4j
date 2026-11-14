@@ -13,21 +13,21 @@ import org.springframework.context.annotation.Bean
 import java.time.Clock
 
 /**
- * Beans de tgauth4j, repris par `telegram { miniApp { } }` quand le réglage n'est pas donné :
- * [TelegramInitDataVerifier] (âge maximal `tgauth4j.init-data-max-age`, bean [Clock] s'il existe) et, si
- * `tgauth4j.bot-token` est renseigné, [DefaultBotTokenResolver]. Chacun cède la place à un bean de l'application.
+ * tgauth4j beans, used by `telegram { miniApp { } }` when the setting is not given: [TelegramInitDataVerifier]
+ * (maximum age `tgauth4j.init-data-max-age`, [Clock] bean if any) and, if `tgauth4j.bot-token` is set,
+ * [DefaultBotTokenResolver]. Each one backs off when the application defines its own bean.
  */
 @AutoConfiguration
 @EnableConfigurationProperties(TgAuth4jProperties::class)
 public class TgAuth4jAutoConfiguration {
 
-    /** Vérificateur d'`initData`. */
+    /** `initData` verifier. */
     @Bean
     @ConditionalOnMissingBean
     public fun telegramInitDataVerifier(properties: TgAuth4jProperties, clock: ObjectProvider<Clock>): TelegramInitDataVerifier =
         TelegramInitDataVerifier(properties.initDataMaxAge, clock.getIfUnique { Clock.systemUTC() })
 
-    /** Un seul bot, de jeton `tgauth4j.bot-token`. */
+    /** Single bot, with token `tgauth4j.bot-token`. */
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty("tgauth4j.bot-token")

@@ -5,13 +5,13 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 
 /**
- * [UserDetailsService] qui reçoit tout l'`initData` vérifié, pas seulement l'identifiant.
+ * [UserDetailsService] that receives the whole verified `initData`, not just the id.
  *
- * [TelegramAuthenticationProvider] appelle [loadUserByInitData] ; par défaut, il délègue à [loadUserByUsername] avec
- * l'identifiant Telegram. Un simple [UserDetailsService] convient aussi : il reçoit l'identifiant Telegram comme nom.
+ * [TelegramAuthenticationProvider] calls [loadUserByInitData]; by default it delegates to [loadUserByUsername] with
+ * the Telegram id. A plain [UserDetailsService] also works: it receives the Telegram id as username.
  */
 public interface TelegramUserDetailsService : UserDetailsService {
 
-    /** Utilisateur authentifié par [initData]. */
+    /** User authenticated by [initData]. */
     public fun loadUserByInitData(initData: TelegramInitData): UserDetails = loadUserByUsername(initData.user.id.toString())
 }

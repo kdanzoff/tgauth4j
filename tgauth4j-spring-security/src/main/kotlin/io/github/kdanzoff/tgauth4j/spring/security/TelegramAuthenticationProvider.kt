@@ -12,18 +12,18 @@ import org.springframework.security.core.userdetails.UserDetailsChecker
 import org.springframework.security.core.userdetails.UserDetailsService
 
 /**
- * Authentifie un [TelegramAuthenticationToken] : vérifie `initData` ([TelegramInitDataVerifier]), puis charge
- * l'utilisateur par [userDetailsService] — [TelegramUserDetailsService.loadUserByInitData] s'il en est un, sinon
- * `loadUserByUsername` avec l'identifiant Telegram — et contrôle son état ([userDetailsChecker]).
+ * Authenticates a [TelegramAuthenticationToken]: verifies `initData` ([TelegramInitDataVerifier]), then loads the
+ * user through [userDetailsService] — [TelegramUserDetailsService.loadUserByInitData] if it is one, otherwise
+ * `loadUserByUsername` with the Telegram id — and checks its status ([userDetailsChecker]).
  *
- * `initData` refusé : [InvalidInitDataException] (401).
+ * Rejected `initData`: [InvalidInitDataException] (401).
  */
 public class TelegramAuthenticationProvider(
     private val verifier: TelegramInitDataVerifier,
     private val userDetailsService: UserDetailsService,
 ) : AuthenticationProvider {
 
-    /** Contrôle du compte chargé (verrouillé, désactivé, expiré) ; Spring Security par défaut. */
+    /** Checks the loaded account (locked, disabled, expired); Spring Security's checker by default. */
     public var userDetailsChecker: UserDetailsChecker = AccountStatusUserDetailsChecker()
 
     override fun authenticate(authentication: Authentication): Authentication {
